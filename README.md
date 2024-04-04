@@ -3,7 +3,7 @@
 This setup covers in my opinion best utilities for creating simple, yet  user-experience on linux.
 I will include my config files and try to update them as I learn new things.
 
-## Dependencies
+## Setup
 
 * window manager: hyprland
 
@@ -11,8 +11,41 @@ I will include my config files and try to update them as I learn new things.
 
 * runner: anyrun (anyrun-git on aur)
 
-* screenshot: flameshot (don't use prebuild version as it is not compatible with wayland, use flameshot-git from aur)
+* screenshot: flameshot (don't use prebuild version as it is not compatible with wayland, use flameshot-git from aur) / hyprshot (?)
 
-* topbar: waybar (??)
+* rest: ags probably
 
-* notifications: mako (??)
+
+## Config
+
+### authentication
+* install `gnome-keyring` for storing passwords
+* and enable it `systemctl enable --user gnome-keyring-daemon.service`
+* install `polkit-gnome` for redirecting password prompts to a nice gui
+* install `seahorse` for a keyring gui (Passwords and secrets)
+* enable gcr `systemctl enable --user gcr-ssh-agent.service`
+* `export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gcr/ssh` in your shell
+* for gpg: add `pinentry-program /usr/bin/pinentry-gnome3` to `~/.gnupg/gpg-agent.conf`
+* reload gpg agent: `gpg-connect-agent reloadagent /bye`, you should see `OK`
+
+### audio
+* install `pipewire pipewire-pulse` and optionally `pipewire-jack pipewire-alsa`
+* enable services: `systemctl enable --user pipewire.service pipewire-pulse.service`
+* optionally install `easyeffects` for advanced audio settings like equalizer (it requires lv2 plugins listed in optional deps)
+* to auto-start it as a daemon create following systemd unit in `/etc/systemd/user/`:
+```ini
+[Unit]
+Description=Easyeffects service
+After=pipewire.service
+
+[Service]
+//TODO
+Type=simple
+WorkingDirectory=%h/.config/fah
+ExecStart=/usr/bin/FAHClient
+CPUSchedulingPolicy=idle
+IOSchedulingClass=3
+
+[Install]
+WantedBy=pipewire.service
+```
