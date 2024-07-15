@@ -1,0 +1,11 @@
+[Unit]
+Description=Easyeffects service
+After=pipewire.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/easyeffects --gapplication-service
+Restart=always
+
+[Install]
+WantedBy=pipewire.service

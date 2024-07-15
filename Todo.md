@@ -1,0 +1,3 @@
+- [ ] Web browser
+- [x] Launcher 
+- [ ] Clipboard history
